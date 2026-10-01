@@ -47,9 +47,6 @@ public class TopDown_Controller_LocalMulti : MonoBehaviour
 
         cam = Camera.main.gameObject;
 
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-
         //anim = GetComponentInChildren<Animator>();
         //camAnim = cam.GetComponent<Animator>();
     }
