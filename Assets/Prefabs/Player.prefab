@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6806685938251384614}
   - component: {fileID: 3299173667304701922}
   - component: {fileID: 1385829928557983308}
+  - component: {fileID: 4635038346154080696}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -62,7 +63,7 @@ MonoBehaviour:
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
+  m_DefaultActionMap: Select
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!143 &3299173667304701922
@@ -110,6 +111,18 @@ MonoBehaviour:
   layer:
     serializedVersion: 2
     m_Bits: 1
+--- !u!114 &4635038346154080696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7652406154787520973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60bb665e6f574dc4eba43997c43486d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SelectController
 --- !u!1001 &9176037612462193664
 PrefabInstance:
   m_ObjectHideFlags: 0
