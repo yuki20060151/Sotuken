@@ -25,6 +25,7 @@ public class TopDown_Controller_LocalMulti : MonoBehaviour
     #region プライベート変数
     PlayerInput input;
     InputAction move, jump, attack;
+    InputActionMap playerMap;
     CharacterController cc;
     GameObject cam;
     Vector3 moveDir, lookDir;
@@ -33,13 +34,28 @@ public class TopDown_Controller_LocalMulti : MonoBehaviour
     //Animator anim, camAnim;
     #endregion
 
+    #region セレクト
+    InputAction look, select, left, ready;
+    InputActionMap selectMap;
+    float y;
+    bool isReady;
+    #endregion
+
     void Awake()
     {
         input = GetComponent<PlayerInput>();
-        #region 入力取得
-        move = input.actions["Move"];
-        jump = input.actions["Jump"];
-        attack = input.actions["Attack"];
+        playerMap = input.actions.FindActionMap("Player");
+        selectMap = input.actions.FindActionMap("Select");
+        #region Player入力取得
+        move = input.actions["Player/Move"];
+        jump = input.actions["Player/Jump"];
+        attack = input.actions["Player/Attack"];
+        #endregion
+        #region Select入力取得
+        look = input.actions["Select/Look"];
+        select = input.actions["Select/Select"];
+        left = input.actions["Select/Left"];
+        ready = input.actions["Select/Ready"];
         #endregion
 
         cc = GetComponent<CharacterController>();
@@ -56,11 +72,19 @@ public class TopDown_Controller_LocalMulti : MonoBehaviour
     {
         jump.performed += OnJump;
         attack.performed += OnAttack;
+
+        select.performed += OnSelect;
+        left.performed += OnLeft;
+        ready.performed += OnReady;
     }
     void OnDisable()
     {
         jump.performed -= OnJump;
         attack.performed -= OnAttack;
+
+        select.performed -= OnSelect;
+        left.performed -= OnLeft;
+        ready.performed -= OnReady;
     }
     void OnJump(InputAction.CallbackContext context)
     {
@@ -71,14 +95,39 @@ public class TopDown_Controller_LocalMulti : MonoBehaviour
     {
         print("アタック!!");
     }
+
+    void OnSelect(InputAction.CallbackContext context)
+    {
+        //boolで選択したら値が0になるまで無効化
+    }
+    void OnLeft(InputAction.CallbackContext context)
+    {
+        Destroy(gameObject);
+    }
+    void OnReady(InputAction.CallbackContext context)
+    {
+        isReady = !isReady;
+        print(isReady ? "準備完了" : "キャンセル");
+        FindAnyObjectByType<LocalMultiManager>().SetReady(input, isReady);
+    }
     #endregion
 
     void Update()
     {
-        GetCameraDirection(); //カメラの向き取得、プレイヤーの移動
-        RotationBody(); //ボディの回転
+        if (input.currentActionMap == playerMap)
+        {
+            GetCameraDirection(); //カメラの向き取得、プレイヤーの移動
+            RotationBody(); //ボディの回転
+
+            //SetAnimation();
+        }
         SetGravity(); //重力計算
-        //SetAnimation();
+
+        if (input.currentActionMap == selectMap)
+        {
+            y += look.ReadValue<float>();
+            transform.rotation = Quaternion.Euler(0, -y, 0);
+        }
     }
 
     #region 計算処理
