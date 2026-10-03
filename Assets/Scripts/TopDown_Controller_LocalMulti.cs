@@ -34,7 +34,7 @@ public class TopDown_Controller_LocalMulti : MonoBehaviour
     //Animator anim, camAnim;
     #endregion
 
-    #region セレクト
+    #region セレクト用
     InputAction look, select, left, ready;
     InputActionMap selectMap;
     float y;

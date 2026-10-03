@@ -99,7 +99,6 @@ public class LocalMultiManager : MonoBehaviour
             foreach (PlayerInput player in players)
             {
                 player.DeactivateInput();
-                //player.ActivateInput();こっちで有効化する
             }
             StartCoroutine(OnMoveRuleDisplay());
             //決まり際にプレイヤー情報を別のDontDestroyOnLoadクラスに送る
@@ -113,6 +112,11 @@ public class LocalMultiManager : MonoBehaviour
             yield return null;
         }
         cam.transform.position = targetPosition;
+
+        foreach (PlayerInput player in players)
+        {
+            player.ActivateInput(); //次回の変更点
+        }
     }
 
     public void SetReady(PlayerInput playerInput, bool isReady)
