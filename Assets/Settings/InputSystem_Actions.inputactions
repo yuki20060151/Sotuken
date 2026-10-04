@@ -335,7 +335,7 @@
             "id": "092aecd0-21bf-4db8-8e3d-92ac273f2162",
             "actions": [
                 {
-                    "name": "Look",
+                    "name": "Rotate",
                     "type": "Value",
                     "id": "4e912326-5d2e-469d-a02f-dc2e1c1ed7b3",
                     "expectedControlType": "Axis",
@@ -344,10 +344,19 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Select",
+                    "name": "ChoseVertical",
                     "type": "Value",
                     "id": "14aef0e1-5a2f-4f0f-a89e-83cb452d2ad5",
-                    "expectedControlType": "",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "ChoseHorizontal",
+                    "type": "Value",
+                    "id": "e53b5d39-044d-4507-be8a-904093b1fe22",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -379,7 +388,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Look",
+                    "action": "Rotate",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -390,7 +399,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Look",
+                    "action": "Rotate",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -401,7 +410,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Look",
+                    "action": "Rotate",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -412,73 +421,73 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Look",
+                    "action": "Rotate",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "",
-                    "id": "93c598e1-10a8-4b58-aa9a-a88c365dc8e6",
-                    "path": "<Gamepad>/leftStick",
+                    "name": "WS",
+                    "id": "03801412-0ce8-4656-bd7c-11fa81a855f2",
+                    "path": "1DAxis",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Select",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "WASD",
-                    "id": "4673023d-24b1-4859-9422-b12b475da13f",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Select",
+                    "action": "ChoseVertical",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "up",
-                    "id": "d70c6542-6842-40cf-ba37-aca116a8263b",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Select",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "3fded387-0b0f-4bd0-885a-80a2af99fe68",
+                    "name": "negative",
+                    "id": "76beb68d-2e4b-414c-847a-6bea22326d9b",
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Select",
+                    "action": "ChoseVertical",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "left",
-                    "id": "5d6a6d9f-0be5-4bf0-92bb-7345cb4164c6",
-                    "path": "<Keyboard>/a",
+                    "name": "positive",
+                    "id": "00952893-3c6d-44d3-831c-877ed576484f",
+                    "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Select",
+                    "action": "ChoseVertical",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "right",
-                    "id": "db0a8e22-1099-493a-b1de-23e6fc076cba",
-                    "path": "<Keyboard>/d",
+                    "name": "UpDown",
+                    "id": "8f712c1d-94a3-42e2-86e2-71378d8a00c2",
+                    "path": "1DAxis",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Select",
+                    "action": "ChoseVertical",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "46c381a5-6cd2-40e0-9031-05143a161359",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChoseVertical",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "a82d7db5-4685-4133-af0a-547f86913fbd",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChoseVertical",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -507,7 +516,7 @@
                 {
                     "name": "",
                     "id": "f0e331ac-deb7-4bf0-9dc3-f08462146c09",
-                    "path": "<Gamepad>/start",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -525,6 +534,72 @@
                     "action": "Ready",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "AD",
+                    "id": "049548d8-80e7-4243-af45-7b1cc0272fd0",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChoseHorizontal",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "e67600cb-e2b5-4ad2-8745-3b0cb1594687",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChoseHorizontal",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "e1aa289c-7415-45c9-8aba-e8b6d5b9a4a0",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChoseHorizontal",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "LeftRight",
+                    "id": "4a626d32-1342-43c6-b74f-e995b3503ee2",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChoseHorizontal",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "9341ec6f-3683-4b29-b372-f945b6724c99",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChoseHorizontal",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "9fede11b-9b41-4e7b-ad8a-9d8e0f114d86",
+                    "path": "<Gamepad>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChoseHorizontal",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         },
@@ -545,7 +620,7 @@
                     "name": "Submit",
                     "type": "Button",
                     "id": "7607c7b6-cd76-4816-beef-bd0341cfe950",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -554,7 +629,7 @@
                     "name": "Cancel",
                     "type": "Button",
                     "id": "15cef263-9014-4fd5-94d9-4e4a6234a6ef",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -618,6 +693,33 @@
                     "type": "PassThrough",
                     "id": "9caa3d8a-6b2f-4e8e-8bad-6ede561bd9be",
                     "expectedControlType": "Quaternion",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SelectVertical",
+                    "type": "Value",
+                    "id": "72e59289-c9de-4e68-b78e-a9a855da9646",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "SelectHorizontal",
+                    "type": "Value",
+                    "id": "40cc9c6f-239e-4fe4-855d-b8f3b97bedba",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Decide",
+                    "type": "Button",
+                    "id": "91d4b36a-6752-4949-88d3-5859f349aee9",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -889,6 +991,138 @@
                     "isPartOfComposite": true
                 },
                 {
+                    "name": "WS",
+                    "id": "bb32aa45-2a2e-4c36-aa0c-06048ea51632",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectVertical",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "58e41bcb-baa2-4ba7-b3e1-0ec06c55705c",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectVertical",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "c2e11bbb-4d14-4c66-82e7-e9116105d121",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectVertical",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "UpDown",
+                    "id": "d627bf82-5cd4-422c-b1a6-2003bc3387d5",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectVertical",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "6535165e-42f9-4d00-ac6b-327fd44e2a60",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectVertical",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "70789ee4-b0e5-4685-b973-246c1aba1395",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectVertical",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "AD",
+                    "id": "e7a98178-4647-4923-bf05-931e4926705c",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectHorizontal",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "e637ebde-fa92-4f70-a5a1-1873d89eb3cf",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectHorizontal",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "55bb8f56-90f6-4f42-b5ba-dcd057bc9b36",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectHorizontal",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "LeftRight",
+                    "id": "3b14bc15-4708-4f98-ac51-2d7a635e917e",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectHorizontal",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "116a7e4d-f028-44b2-89d8-d664ca02adf2",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectHorizontal",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "02a77ec5-7bba-4ef2-8847-97055b982c75",
+                    "path": "<Gamepad>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectHorizontal",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
                     "name": "",
                     "id": "9e92bb26-7e3b-4ec4-b06b-3c8f8e498ddc",
                     "path": "*/{Submit}",
@@ -1039,6 +1273,28 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDeviceOrientation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9265ed41-a78c-4223-8b8e-b62fe5723fba",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Decide",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "06b592c4-619a-4eda-a78a-89e3cab9c246",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Decide",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

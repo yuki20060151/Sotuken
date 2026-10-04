@@ -2,9 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 
 public class LocalMultiManager : MonoBehaviour
 {
+    [Header("UI")]
+    [SerializeField] GameObject[] selectUIs;
+    [SerializeField] TMPro.TMP_Text timerText;
+    [SerializeField] float completeTime = 3;
     [Header("カメラ")]
     [SerializeField] GameObject cam;
     [SerializeField] Vector3 targetPosition;
@@ -12,17 +17,18 @@ public class LocalMultiManager : MonoBehaviour
     [Header("スポーン位置")]
     [SerializeField] Transform[] spawnPoints;
     [Header("準備完了タイマー")]
-    [SerializeField] TMPro.TMP_Text timerText;
-    [SerializeField] float completeTime = 3;
 
     PlayerInputManager manager;
-    List<PlayerInput> players = new List<PlayerInput>();//参加しているプレイヤー
+    PlayerInput[] players = new PlayerInput[4];//参加しているプレイヤー
     List<bool> playersReady = new List<bool>();
+    bool?[] nullableReady = new bool?[] { null, null, null, null };
     float defaultCompleteTime;
     bool moveRuleDisplay;
+    string initialWord;
 
     void Awake()
     {
+        initialWord = timerText.text;
         manager = GetComponent<PlayerInputManager>();
         defaultCompleteTime = completeTime + 1;
     }
@@ -40,15 +46,25 @@ public class LocalMultiManager : MonoBehaviour
     }
     private void HandlePlayerJoined(PlayerInput playerInput)
     {
-        players.Add(playerInput);
-        playersReady.Add(false);
-        Debug.Log($"プレイヤー:{players.IndexOf(playerInput) + 1}Pが参加しました。使用デバイス: {playerInput.devices[0].displayName}");
+        int index = 0;
+        for (int i = 0; i < players.Length; i++)
+        {
+            if (players[i] != null) continue;
+            players[i] = playerInput;
+            index = i;
+            break;
+        }
+        nullableReady[index] = false;
+        selectUIs[index].SetActive(true);
+        players[index].uiInputModule = selectUIs[index].GetComponent<InputSystemUIInputModule>();
+
+        Debug.Log($"{index + 1}列目に参加しました。使用デバイス: {playerInput.devices[0].displayName}");
         if (playerInput.TryGetComponent<CharacterController>(out var cc))
         {
             playerInput.SwitchCurrentActionMap("Select");
             DontDestroyOnLoad(playerInput.gameObject);
             cc.enabled = false;
-            playerInput.transform.position = spawnPoints[players.IndexOf(playerInput)].position;
+            playerInput.transform.position = spawnPoints[index].position;
             cc.enabled = true;
         }
         else
@@ -58,10 +74,14 @@ public class LocalMultiManager : MonoBehaviour
     }
     private void HandlePlayerLeft(PlayerInput playerInput)
     {
-        int index = players.IndexOf(playerInput);
-        Debug.Log($"プレイヤー:{index + 1}Pが離脱しました。");
-        players.RemoveAt(index);
-        playersReady.RemoveAt(index);
+        int index = System.Array.IndexOf(players, playerInput);
+        Debug.Log($"{index + 1}列目のプレイヤーが離脱しました。");
+        players[index] = null;
+        nullableReady[index] = null;
+        //1FおいてからMultiplayerEventSystemを非アクティブにする(退出ボタン処理中にEventSystemがnullになるのを防ぐ)
+        StartCoroutine(DeactivateSelectUINextFrame(index));
+        /*
+        if (players.Count == 0) return;
         foreach (PlayerInput input in players)
         {
             CharacterController cc = input.GetComponent<CharacterController>();
@@ -69,6 +89,12 @@ public class LocalMultiManager : MonoBehaviour
             input.transform.position = spawnPoints[players.IndexOf(input)].position;
             cc.enabled = true;
         }
+        */
+    }
+    IEnumerator DeactivateSelectUINextFrame(int index)
+    {
+        yield return null;
+        selectUIs[index].SetActive(false);
     }
     #endregion
 
@@ -79,13 +105,12 @@ public class LocalMultiManager : MonoBehaviour
         {
             if (!ready)
             {
-                if (timerText.gameObject.activeSelf) timerText.gameObject.SetActive(false);
+                if (timerText.text != initialWord) timerText.text = initialWord;
                 if (completeTime < defaultCompleteTime) completeTime = defaultCompleteTime;
                 return;
             }
         }
 
-        if (!timerText.gameObject.activeSelf) timerText.gameObject.SetActive(true);
         if (completeTime > 0)
         {
             completeTime -= Time.deltaTime;
@@ -98,7 +123,9 @@ public class LocalMultiManager : MonoBehaviour
             timerText.gameObject.SetActive(false);
             foreach (PlayerInput player in players)
             {
+                if (player == null) continue;
                 player.DeactivateInput();
+                DontDestroyOnLoad(player.gameObject);
             }
             StartCoroutine(OnMoveRuleDisplay());
             //決まり際にプレイヤー情報を別のDontDestroyOnLoadクラスに送る
@@ -115,11 +142,23 @@ public class LocalMultiManager : MonoBehaviour
 
         foreach (PlayerInput player in players)
         {
-            player.ActivateInput(); //次回の変更点
+            if (player == null) continue;
+            //player.ActivateInput(); //次回の変更点
         }
     }
 
-    public void SetReady(PlayerInput playerInput, bool isReady)
+    #region ボタン操作
+    public void OnLeftButton(int playerIndex)
+    {
+        Destroy(players[playerIndex].gameObject);
+    }
+    public void OnAccessoryButton()
+    {
+
+    }
+    #endregion
+
+    public void SetReady()
     {
         foreach (PlayerInput player in players)
         {

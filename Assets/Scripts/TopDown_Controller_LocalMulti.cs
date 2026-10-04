@@ -22,7 +22,7 @@ public class TopDown_Controller_LocalMulti : MonoBehaviour
 
     #endregion
 
-    #region プライベート変数
+    #region プレイヤー用
     PlayerInput input;
     InputAction move, jump, attack;
     InputActionMap playerMap;
@@ -35,10 +35,9 @@ public class TopDown_Controller_LocalMulti : MonoBehaviour
     #endregion
 
     #region セレクト用
-    InputAction look, select, left, ready;
+    InputAction rotate;
     InputActionMap selectMap;
     float y;
-    bool isReady;
     #endregion
 
     void Awake()
@@ -52,10 +51,7 @@ public class TopDown_Controller_LocalMulti : MonoBehaviour
         attack = input.actions["Player/Attack"];
         #endregion
         #region Select入力取得
-        look = input.actions["Select/Look"];
-        select = input.actions["Select/Select"];
-        left = input.actions["Select/Left"];
-        ready = input.actions["Select/Ready"];
+        rotate = input.actions["Select/Rotate"];
         #endregion
 
         cc = GetComponent<CharacterController>();
@@ -70,22 +66,17 @@ public class TopDown_Controller_LocalMulti : MonoBehaviour
     #region 入力システム
     void OnEnable()
     {
+        //プレイヤー
         jump.performed += OnJump;
         attack.performed += OnAttack;
-
-        select.performed += OnSelect;
-        left.performed += OnLeft;
-        ready.performed += OnReady;
     }
     void OnDisable()
     {
+        //プレイヤー
         jump.performed -= OnJump;
         attack.performed -= OnAttack;
-
-        select.performed -= OnSelect;
-        left.performed -= OnLeft;
-        ready.performed -= OnReady;
     }
+    //プレイヤー入力
     void OnJump(InputAction.CallbackContext context)
     {
         if (!Physics.CheckSphere(transform.position + new Vector3(0, cc.radius - 0.01f, 0), cc.radius, layer, QueryTriggerInteraction.Ignore)) return;
@@ -94,21 +85,6 @@ public class TopDown_Controller_LocalMulti : MonoBehaviour
     void OnAttack(InputAction.CallbackContext context)
     {
         print("アタック!!");
-    }
-
-    void OnSelect(InputAction.CallbackContext context)
-    {
-        //boolで選択したら値が0になるまで無効化
-    }
-    void OnLeft(InputAction.CallbackContext context)
-    {
-        Destroy(gameObject);
-    }
-    void OnReady(InputAction.CallbackContext context)
-    {
-        isReady = !isReady;
-        print(isReady ? "準備完了" : "キャンセル");
-        FindAnyObjectByType<LocalMultiManager>().SetReady(input, isReady);
     }
     #endregion
 
@@ -125,7 +101,7 @@ public class TopDown_Controller_LocalMulti : MonoBehaviour
 
         if (input.currentActionMap == selectMap)
         {
-            y += look.ReadValue<float>();
+            y += rotate.ReadValue<float>();
             transform.rotation = Quaternion.Euler(0, -y, 0);
         }
     }
