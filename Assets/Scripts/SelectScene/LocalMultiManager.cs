@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
@@ -8,19 +7,20 @@ public class LocalMultiManager : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] GameObject[] selectUIs;
+    [SerializeField] GameObject[] readyImage;
     [SerializeField] TMPro.TMP_Text timerText;
     [SerializeField] float completeTime = 3;
+
     [Header("カメラ")]
     [SerializeField] GameObject cam;
     [SerializeField] Vector3 targetPosition;
     [SerializeField] float speed = 20;
+
     [Header("スポーン位置")]
     [SerializeField] Transform[] spawnPoints;
-    [Header("準備完了タイマー")]
 
     PlayerInputManager manager;
     PlayerInput[] players = new PlayerInput[4];//参加しているプレイヤー
-    List<bool> playersReady = new List<bool>();
     bool?[] nullableReady = new bool?[] { null, null, null, null };
     float defaultCompleteTime;
     bool moveRuleDisplay;
@@ -30,6 +30,7 @@ public class LocalMultiManager : MonoBehaviour
     {
         initialWord = timerText.text;
         manager = GetComponent<PlayerInputManager>();
+        manager.EnableJoining();
         defaultCompleteTime = completeTime + 1;
     }
 
@@ -100,10 +101,17 @@ public class LocalMultiManager : MonoBehaviour
 
     void Update()
     {
-        if (playersReady.Count == 0 || moveRuleDisplay) return;
-        foreach (bool ready in playersReady)
+        if (moveRuleDisplay) return;
+        int nullCount = 0;
+        foreach (bool? ready in nullableReady)
         {
-            if (!ready)
+            if (ready == null)
+            {
+                nullCount++;
+                if (nullCount == 4) return;
+                continue;
+            }
+            else if (ready == false)
             {
                 if (timerText.text != initialWord) timerText.text = initialWord;
                 if (completeTime < defaultCompleteTime) completeTime = defaultCompleteTime;
@@ -119,6 +127,7 @@ public class LocalMultiManager : MonoBehaviour
         }
         if (completeTime <= 0)
         {
+            manager.DisableJoining(); //途中参加を許可しない
             moveRuleDisplay = true;
             timerText.gameObject.SetActive(false);
             foreach (PlayerInput player in players)
@@ -126,9 +135,10 @@ public class LocalMultiManager : MonoBehaviour
                 if (player == null) continue;
                 player.DeactivateInput();
                 DontDestroyOnLoad(player.gameObject);
+                selectUIs[System.Array.IndexOf(players, player)].SetActive(false);
             }
             StartCoroutine(OnMoveRuleDisplay());
-            //決まり際にプレイヤー情報を別のDontDestroyOnLoadクラスに送る
+            //決まったらプレイヤー情報を別のDontDestroyOnLoadクラスに送る
         }
     }
     IEnumerator OnMoveRuleDisplay()
@@ -136,6 +146,7 @@ public class LocalMultiManager : MonoBehaviour
         while (!(Vector3.Distance(cam.transform.position, targetPosition) < 0.01f))
         {
             cam.transform.position = Vector3.MoveTowards(cam.transform.position, targetPosition, speed * Time.deltaTime);
+            cam.transform.rotation = Quaternion.Slerp(cam.transform.rotation, Quaternion.Euler(13, 0, 0), speed / 2 * Time.deltaTime);
             yield return null;
         }
         cam.transform.position = targetPosition;
@@ -143,7 +154,8 @@ public class LocalMultiManager : MonoBehaviour
         foreach (PlayerInput player in players)
         {
             if (player == null) continue;
-            //player.ActivateInput(); //次回の変更点
+            player.SwitchCurrentActionMap("Player");
+            player.ActivateInput();
         }
     }
 
@@ -154,27 +166,28 @@ public class LocalMultiManager : MonoBehaviour
     }
     public void OnAccessoryButton()
     {
+        //各アクセサリー画面を開く
+    }
+    public void OnReadyButton(int playerIndex)
+    {
+        if (nullableReady[playerIndex] == null) return;
+        nullableReady[playerIndex] = !nullableReady[playerIndex];
 
+        if (readyImage[playerIndex].TryGetComponent(out UnityEngine.UI.Image image))
+        {
+            bool imageReady = nullableReady[playerIndex] ?? false;
+            image.color = imageReady ? Color.green : Color.red;
+        }
     }
     #endregion
 
-    public void SetReady()
-    {
-        foreach (PlayerInput player in players)
-        {
-            if (player == playerInput)
-            {
-                playersReady[players.IndexOf(player)] = isReady;
-                return;
-            }
-        }
-    }
     public PlayerInput GetPlayer(int num)
     {
+        if (players[num] == null)
+        {
+            Debug.LogWarning("その番号のプレイヤーはいません");
+            return null;
+        }
         return players[num];
     }
-    /*
-    manager.EnableJoining()
-    manager.DisableJoining()
-    */
 }
