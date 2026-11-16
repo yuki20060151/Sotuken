@@ -31,6 +31,8 @@ public class TopDown_Controller_LocalMulti : MonoBehaviour
     Vector3 moveDir, lookDir;
     float currentMoveSpeed;
     float verticalVelocity; //プレイヤーの縦移動速度
+    float attackCoolTime;
+    float maxCoolTime;
     //Animator anim, camAnim;
     #endregion
 
@@ -84,7 +86,11 @@ public class TopDown_Controller_LocalMulti : MonoBehaviour
     }
     void OnAttack(InputAction.CallbackContext context)
     {
+        attackCoolTime -= Time.deltaTime;
+        if (attackCoolTime > 0) return;
+        attackCoolTime = maxCoolTime;
         print("アタック!!");
+        
     }
     #endregion
 
