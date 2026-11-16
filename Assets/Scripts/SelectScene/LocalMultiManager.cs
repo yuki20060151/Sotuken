@@ -66,11 +66,13 @@ public class LocalMultiManager : MonoBehaviour
             DontDestroyOnLoad(playerInput.gameObject);
             cc.enabled = false;
             playerInput.transform.position = spawnPoints[index].position;
+            playerInput.GetComponent<TopDown_Controller_LocalMulti>().SetBodyRotation(spawnPoints[index].rotation.eulerAngles.y);
             cc.enabled = true;
         }
         else
         {
             playerInput.transform.position = spawnPoints[playerInput.playerIndex].position;
+            playerInput.GetComponent<TopDown_Controller_LocalMulti>().SetBodyRotation(spawnPoints[index].rotation.eulerAngles.y);
         }
     }
     private void HandlePlayerLeft(PlayerInput playerInput)

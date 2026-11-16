@@ -101,8 +101,8 @@ public class TopDown_Controller_LocalMulti : MonoBehaviour
 
         if (input.currentActionMap == selectMap)
         {
-            y += rotate.ReadValue<float>();
-            transform.rotation = Quaternion.Euler(0, -y, 0);
+            y -= rotate.ReadValue<float>();
+            transform.rotation = Quaternion.Euler(0, y, 0);
         }
     }
 
@@ -113,14 +113,14 @@ public class TopDown_Controller_LocalMulti : MonoBehaviour
         Vector3 camRight = cam.transform.right; camRight.y = 0f; camRight.Normalize();
         Vector2 input_Move = move.ReadValue<Vector2>();
         moveDir = camForward * input_Move.y + camRight * input_Move.x;
-        if (moveDir != Vector3.zero)
-            lookDir = moveDir;
+        //if (moveDir != Vector3.zero)
+        //lookDir = moveDir;
         cc.Move(moveDir * currentMoveSpeed * Time.deltaTime);
     }
     void RotationBody()
     {
-        if (lookDir == Vector3.zero) return;
-        Quaternion targetRotation = Quaternion.LookRotation(lookDir);
+        if (moveDir == Vector3.zero) return;
+        Quaternion targetRotation = Quaternion.LookRotation(moveDir);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, bodyRotationSpeed * Time.deltaTime);
     }
     void SetGravity()
@@ -154,6 +154,11 @@ public class TopDown_Controller_LocalMulti : MonoBehaviour
         }
     }*/
     #endregion
+
+    public void SetBodyRotation(float angle)
+    {
+        y = angle;
+    }
 
     void OnDrawGizmosSelected()
     {
