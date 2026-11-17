@@ -5,80 +5,78 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody))]
 public class TopDownRigid : MonoBehaviour
 {
-    #region インスペクター設定
-    [Header("移動設定")]
-    [SerializeField] float walkSpeed = 3;
+    #region Inspector
+    [Header("MoveConfig")]
+    [SerializeField] float moveSpeed = 3;
+    [SerializeField] float maxMoveSpeed;
     [SerializeField] float bodyRotationSpeed = 10;
-    [Header("重力設定")]
+    [Header("GravityConfig")]
     [SerializeField] float jumpHeight = 2;
     [SerializeField] float gravity = 9.81f;
     [SerializeField] float terminalVelocity = 50;
 
-    [Header("地面判定")]
+    [Header("GroundLayerConfig")]
     [SerializeField] LayerMask layer;
     #endregion
 
     Rigidbody rb;
 
-    #region プレイヤー用
+    #region PlayerMove
     PlayerInput input;
     InputAction move, jump, attack;
-    InputActionMap playerMap;
+    InputActionMap playerMoveMap;
     CapsuleCollider cc;
     GameObject cam;
     Vector3 moveDir, lookDir;
     float currentMoveSpeed;
-    float verticalVelocity; //プレイヤーの縦移動速度
+    float verticalVelocity;
     float attackCoolTime;
     float maxCoolTime;
     //Animator anim, camAnim;
     #endregion
 
-    #region セレクト用
+    #region PlayerSelect
     InputAction rotate;
-    InputActionMap selectMap;
+    InputActionMap playerSelectMap;
     float y;
     #endregion
 
     void Awake()
     {
         input = GetComponent<PlayerInput>();
-        playerMap = input.actions.FindActionMap("Player");
-        selectMap = input.actions.FindActionMap("Select");
-        #region Player入力取得
+        playerMoveMap = input.actions.FindActionMap("Player");
+        playerSelectMap = input.actions.FindActionMap("Select");
+        #region PlayerMove_ActionMap
         move = input.actions["Player/Move"];
         jump = input.actions["Player/Jump"];
         attack = input.actions["Player/Attack"];
         #endregion
-        #region Select入力取得
+        #region PlayerSelect_ActionMap
         rotate = input.actions["Select/Rotate"];
         #endregion
 
         rb = GetComponent<Rigidbody>();
 
         cc = GetComponent<CapsuleCollider>();
-        //playerStandCenter = cc.center.y;
-        //playerStandHeight = cc.height;
-        currentMoveSpeed = walkSpeed;
+
+        cam = Camera.main.gameObject;
 
         //anim = GetComponentInChildren<Animator>();
         //camAnim = cam.GetComponent<Animator>();
     }
 
-    #region 入力システム
+    #region InputSystem
     void OnEnable()
     {
-        //プレイヤー
         jump.performed += OnJump;
         attack.performed += OnAttack;
     }
     void OnDisable()
     {
-        //プレイヤー
         jump.performed -= OnJump;
         attack.performed -= OnAttack;
     }
-    //プレイヤー入力
+    //PlayerInputAction
     void OnJump(InputAction.CallbackContext context)
     {
         if (!Physics.CheckSphere(transform.position + new Vector3(0, cc.radius - 0.01f, 0), cc.radius, layer, QueryTriggerInteraction.Ignore)) return;
@@ -86,57 +84,47 @@ public class TopDownRigid : MonoBehaviour
     }
     void OnAttack(InputAction.CallbackContext context)
     {
-        attackCoolTime -= Time.deltaTime;
-        if (attackCoolTime > 0) return;
-        attackCoolTime = maxCoolTime;
-        print("アタック!!");
-
+        //
     }
     #endregion
 
-    /*
     void Update()
     {
-        CameraControl(); //カメラの移動、操作
-        GetCameraDirection(); //カメラの向き取得、プレイヤーの移動
-        RotationBody(); //ボディの回転
-        if (smoothTime < 0.1f && Physics.CheckSphere(transform.position + new Vector3(0, cc.radius, 0), cc.radius, layer, QueryTriggerInteraction.Ignore))
+        if (input.currentActionMap == playerMoveMap)
         {
-            smoothTime = 0.1f;
+            GetCameraDirection();
+            Move();
+            RotationBody(); //繝懊ョ繧｣縺ｮ蝗櫁ｻ｢
+            //SetAnimation();
+        }
+        else if (input.currentActionMap == playerSelectMap)
+        {
+            y -= rotate.ReadValue<float>();
+            transform.rotation = Quaternion.Euler(0, y, 0);
         }
     }
 
-    #region 計算処理
-    void CameraControl()
-    {
-        camPos.transform.position = Vector3.SmoothDamp
-        (
-            camPos.transform.position,
-            transform.position + new Vector3(0, cc.height, 0),
-            ref camVelocity,
-            smoothTime
-        );
-
-        Vector2 input_Look = input.Player.Look.ReadValue<Vector2>() * sensitivity * Time.deltaTime;
-        mx -= input_Look.y; my += input_Look.x;
-        mx = Mathf.Clamp(mx, -verticalAngleLimit, verticalAngleLimit);
-        camPos.transform.rotation = Quaternion.Euler(mx, my, 0);
-    }
+    #region Calculation
     void GetCameraDirection()
     {
-        Vector3 camForward = camPos.transform.forward; camForward.y = 0f; camForward.Normalize();
-        Vector3 camRight = camPos.transform.right; camRight.y = 0f; camRight.Normalize();
-        Vector2 input_Move = input.Player.Move.ReadValue<Vector2>();
+        Vector3 camForward = cam.transform.forward; camForward.y = 0f; camForward.Normalize();
+        Vector3 camRight = cam.transform.right; camRight.y = 0f; camRight.Normalize();
+        Vector2 input_Move = move.ReadValue<Vector2>();
         moveDir = camForward * input_Move.y + camRight * input_Move.x;
-        transform.Translate(moveDir * currentMoveSpeed * Time.deltaTime, Space.World);
+    }
+    void Move()
+    {
+        //use to Direction,Speed[x],and Time.deltaTime
+        //rb.linearVelocity = ;
     }
     void RotationBody()
     {
-        Vector3 camForward = camPos.transform.forward; camForward.y = 0f; camForward.Normalize();
-        Quaternion targetRotation = Quaternion.LookRotation(camForward);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        if (moveDir == Vector3.zero) return;
+        Quaternion targetRotation = Quaternion.LookRotation(moveDir);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, bodyRotationSpeed * Time.deltaTime);
     }
-    /*void SetAnimation()
+    /*
+    void SetAnimation()
     {
         if (anim != null)
         {
@@ -152,24 +140,19 @@ public class TopDownRigid : MonoBehaviour
             camAnim.SetBool("IsMove", moveInput.x != 0 || moveInput.y != 0);
             camAnim.SetFloat("BobSpeed", isSprint ? 2 : 1);
         }
-    }*/
-    //#endregion
-    /*
+    }
+    */
+    #endregion
+
+    public void SetBodyRotation(float angle)
+    {
+        y = angle;
+    }
+
     void OnDrawGizmosSelected()
     {
         if (cc == null) return;
-        Gizmos.color = Physics.CheckSphere(transform.position + new Vector3(0, cc.radius, 0), cc.radius, layer, QueryTriggerInteraction.Ignore) ? Color.green : Color.red;
+        Gizmos.color = Physics.CheckSphere(transform.position + new Vector3(0, cc.radius - 0.01f, 0), cc.radius, layer, QueryTriggerInteraction.Ignore) ? Color.green : Color.red;
         Gizmos.DrawWireSphere(transform.position + new Vector3(0, cc.radius, 0), cc.radius);
-
-        if (!isCrouch) return;
-        Gizmos.color = Physics.CheckSphere
-        (
-            transform.position + new Vector3(0, playerStandHeight - cc.radius, 0),
-            cc.radius,
-            cannotStandLayer,
-            QueryTriggerInteraction.Ignore
-        ) ? Color.red : Color.green;
-        Gizmos.DrawWireSphere(transform.position + new Vector3(0, playerStandHeight - cc.radius, 0), cc.radius);
     }
-    */
 }
