@@ -18,10 +18,6 @@ public class TopDown_Controller_LocalMulti : MonoBehaviour
     [SerializeField] LayerMask layer;
     #endregion
 
-    #region パブリック変数
-
-    #endregion
-
     #region プレイヤー用
     PlayerInput input;
     InputAction move, jump, attack;
