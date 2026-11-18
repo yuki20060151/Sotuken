@@ -10,10 +10,7 @@ public class TopDownRigid : MonoBehaviour
     [SerializeField] float moveSpeed = 3;
     [SerializeField] float maxMoveSpeed;
     [SerializeField] float bodyRotationSpeed = 10;
-    [Header("GravityConfig")]
-    [SerializeField] float jumpHeight = 2;
-    [SerializeField] float gravity = 9.81f;
-    [SerializeField] float terminalVelocity = 50;
+    [SerializeField] float jumpForce = 5;
 
     [Header("GroundLayerConfig")]
     [SerializeField] LayerMask layer;
@@ -27,7 +24,7 @@ public class TopDownRigid : MonoBehaviour
     InputActionMap playerMoveMap;
     CapsuleCollider cc;
     GameObject cam;
-    Vector3 moveDir, lookDir;
+    Vector3 moveDir;
     float currentMoveSpeed;
     float verticalVelocity;
     float attackCoolTime;
@@ -82,7 +79,7 @@ public class TopDownRigid : MonoBehaviour
     {
         if (!Physics.CheckSphere(transform.position + new Vector3(0, cc.radius - 0.01f, 0), cc.radius, layer, QueryTriggerInteraction.Ignore)) return;
         //verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * -gravity);
-        rb.AddForce(Vector3.up * 5,ForceMode.Impulse);
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
     void OnAttack(InputAction.CallbackContext context)
     {
@@ -107,7 +104,7 @@ public class TopDownRigid : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(input.currentActionMap == playerMoveMap)
+        if (input.currentActionMap == playerMoveMap)
         {
             Move();
         }
