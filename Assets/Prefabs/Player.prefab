@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5712994968194153041}
   - component: {fileID: 6806685938251384614}
-  - component: {fileID: 3299173667304701922}
-  - component: {fileID: 1385829928557983308}
+  - component: {fileID: 1596969649075994874}
+  - component: {fileID: 6307784358083667644}
+  - component: {fileID: 4989984893258248735}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -62,11 +63,11 @@ MonoBehaviour:
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: df70fa95-8a34-4494-b137-73ab6b9c7d37
+  m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!143 &3299173667304701922
-CharacterController:
+--- !u!136 &1596969649075994874
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -80,17 +81,42 @@ CharacterController:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 2
+  serializedVersion: 2
   m_Radius: 0.3
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.0001
-  m_MinMoveDistance: 0.001
+  m_Height: 2
+  m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &1385829928557983308
+--- !u!54 &6307784358083667644
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7652406154787520973}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &4989984893258248735
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -99,11 +125,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7652406154787520973}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2baca43ab0144bb4d89c28651c2b7328, type: 3}
+  m_Script: {fileID: 11500000, guid: 1dc2e274ae4afdb4ca3e9d6fed769fe3, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TopDown_Controller_LocalMulti
-  walkSpeed: 3
-  bodyRotationSpeed: 5
+  m_EditorClassIdentifier: Assembly-CSharp::TopDownRigid
+  moveSpeed: 200
+  maxMoveSpeed: 0
+  bodyRotationSpeed: 10
   jumpHeight: 2
   gravity: 9.81
   terminalVelocity: 50

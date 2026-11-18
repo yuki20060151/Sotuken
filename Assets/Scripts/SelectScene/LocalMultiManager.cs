@@ -60,20 +60,10 @@ public class LocalMultiManager : MonoBehaviour
         players[index].uiInputModule = selectUIs[index].GetComponent<InputSystemUIInputModule>();
 
         Debug.Log($"{index + 1}列目に参加しました。使用デバイス: {playerInput.devices[0].displayName}");
-        if (playerInput.TryGetComponent<CharacterController>(out var cc))
-        {
-            playerInput.SwitchCurrentActionMap("Select");
-            DontDestroyOnLoad(playerInput.gameObject);
-            cc.enabled = false;
-            playerInput.transform.position = spawnPoints[index].position;
-            playerInput.GetComponent<TopDown_Controller_LocalMulti>().SetBodyRotation(spawnPoints[index].rotation.eulerAngles.y);
-            cc.enabled = true;
-        }
-        else
-        {
-            playerInput.transform.position = spawnPoints[playerInput.playerIndex].position;
-            playerInput.GetComponent<TopDown_Controller_LocalMulti>().SetBodyRotation(spawnPoints[index].rotation.eulerAngles.y);
-        }
+        playerInput.SwitchCurrentActionMap("Select");
+        DontDestroyOnLoad(playerInput.gameObject);
+        playerInput.transform.position = spawnPoints[index].position;
+        playerInput.GetComponent<TopDownRigid>().SetBodyRotation(spawnPoints[index].rotation.eulerAngles.y);
     }
     private void HandlePlayerLeft(PlayerInput playerInput)
     {

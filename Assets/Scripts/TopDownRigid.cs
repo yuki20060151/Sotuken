@@ -56,6 +56,7 @@ public class TopDownRigid : MonoBehaviour
         #endregion
 
         rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
 
         cc = GetComponent<CapsuleCollider>();
 
@@ -80,7 +81,8 @@ public class TopDownRigid : MonoBehaviour
     void OnJump(InputAction.CallbackContext context)
     {
         if (!Physics.CheckSphere(transform.position + new Vector3(0, cc.radius - 0.01f, 0), cc.radius, layer, QueryTriggerInteraction.Ignore)) return;
-        verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * -gravity);
+        //verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * -gravity);
+        rb.AddForce(Vector3.up * 5,ForceMode.Impulse);
     }
     void OnAttack(InputAction.CallbackContext context)
     {
@@ -93,7 +95,6 @@ public class TopDownRigid : MonoBehaviour
         if (input.currentActionMap == playerMoveMap)
         {
             GetCameraDirection();
-            Move();
             RotationBody(); //ボディの回転
             //SetAnimation();
         }
@@ -101,6 +102,14 @@ public class TopDownRigid : MonoBehaviour
         {
             y -= rotate.ReadValue<float>();
             transform.rotation = Quaternion.Euler(0, y, 0);
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if(input.currentActionMap == playerMoveMap)
+        {
+            Move();
         }
     }
 
@@ -114,8 +123,10 @@ public class TopDownRigid : MonoBehaviour
     }
     void Move()
     {
-        //use to Direction,Speed[x],and Time.deltaTime
-        //rb.linearVelocity = ;
+        float x = moveDir.x * moveSpeed * Time.fixedDeltaTime;
+        float y = rb.linearVelocity.y;
+        float z = moveDir.z * moveSpeed * Time.fixedDeltaTime;
+        rb.linearVelocity = new Vector3(x, y, z);
     }
     void RotationBody()
     {
