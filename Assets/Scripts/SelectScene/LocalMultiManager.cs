@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.UI;
 
 public class LocalMultiManager : MonoBehaviour
 {
@@ -10,6 +12,14 @@ public class LocalMultiManager : MonoBehaviour
     [SerializeField] GameObject[] readyImage;
     [SerializeField] TMPro.TMP_Text timerText;
     [SerializeField] float completeTime = 3;
+
+    [Header("ボタンの配列(無効,有効化用)")]
+    [SerializeField] IntArrayWrapper[] buttonArrays;
+    [Serializable]
+    public class IntArrayWrapper
+    {
+        public Button[] button;
+    }
 
     [Header("カメラ")]
     [SerializeField] GameObject cam;
@@ -156,7 +166,7 @@ public class LocalMultiManager : MonoBehaviour
     {
         Destroy(players[playerIndex].gameObject);
     }
-    public void OnAccessoryButton()
+    public void OnAccessoryButton(int playerIndex)
     {
         //各アクセサリー画面を開く
     }
@@ -164,6 +174,12 @@ public class LocalMultiManager : MonoBehaviour
     {
         if (nullableReady[playerIndex] == null) return;
         nullableReady[playerIndex] = !nullableReady[playerIndex];
+
+        Button[] setButtonArray = buttonArrays[playerIndex].button;
+        foreach (Button button in setButtonArray)
+        {
+            button.interactable = !nullableReady[playerIndex] ?? false;
+        }
 
         if (readyImage[playerIndex].TryGetComponent(out UnityEngine.UI.Image image))
         {
