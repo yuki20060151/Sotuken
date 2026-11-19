@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
-public class LocalMultiManager : MonoBehaviour
+public class LocalMulti_SelectUI_Manager : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] GameObject[] selectUIs;
@@ -137,7 +137,7 @@ public class LocalMultiManager : MonoBehaviour
                 if (player == null) continue;
                 player.DeactivateInput();
                 DontDestroyOnLoad(player.gameObject);
-                selectUIs[System.Array.IndexOf(players, player)].SetActive(false);
+                selectUIs[Array.IndexOf(players, player)].SetActive(false);
             }
             StartCoroutine(OnMoveRuleDisplay());
             //決まったらプレイヤー情報を別のDontDestroyOnLoadクラスに送る

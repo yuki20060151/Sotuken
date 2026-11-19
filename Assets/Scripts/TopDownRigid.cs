@@ -82,8 +82,16 @@ public class TopDownRigid : MonoBehaviour
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
     void OnAttack(InputAction.CallbackContext context)
-    {
-        //
+    {   /*
+        RaycastHit[] hits = Physics.SphereCastAll(,,);
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.TryGetComponent<>(out IDamageable component))
+            {
+
+            }
+        }
+        */
     }
     #endregion
 
